@@ -16,7 +16,7 @@ class SearchTorrent extends Component {
     }
 
     handleTorrentSearch(e){
-        let inputBox = document.getElementById("add-magnet-box");
+        let inputBox = document.getElementById("search-magnet-box");
         if (inputBox.value){
             this.setState({isLoading: true});
             this.props.updateSearchResults([]);
@@ -36,7 +36,7 @@ class SearchTorrent extends Component {
     }
 
     handleClick(item){
-        const { hide } = cogoToast.loading(
+        let { hide } = cogoToast.loading(
             <div className="toast-confirmation">
                 <p>Choose one option</p>
                 <button style={{backgroundColor: "rgb(42, 154, 245)"}} onClick={() => copyMagnet(item)}>Copy</button>
@@ -61,9 +61,9 @@ class SearchTorrent extends Component {
                 getMagnetFromSearch(item).then(response => {
                     addMagnet(response).then(res =>{
                         if (res){
-                            cogoToast.success("Magnet Added!")
+                            cogoToast.success("Magnet Added!");
                         }else{
-                            cogoToast.error("Unable to Added Magnet")
+                            cogoToast.error("Unable to Added Magnet");
                         }
                     })
                 })
@@ -80,7 +80,7 @@ class SearchTorrent extends Component {
                 getMagnetFromSearch(item).then(response => {
                     this.copyToClipboard(response);
                 })
-            }    
+            }
             
         }
 
@@ -116,19 +116,19 @@ class SearchTorrent extends Component {
         return(
             <div>
                 <div className="add-magnet-div">
-                    <input id="add-magnet-box" type="text" placeholder="Search Torrent" onKeyPress={event => {if (event.key === 'Enter') {this.handleTorrentSearch()}}} />
-                    <img className="add-magnet-icon" src="/autolycus/icons/bx-search.svg" onClick={this.handleTorrentSearch}/>
+                    <input id="search-magnet-box" type="text" placeholder="Search Torrent" autoComplete="off" onKeyPress={event => {if (event.key === 'Enter') {this.handleTorrentSearch()}}} />
+                    <img alt='' className="add-magnet-icon" src="/autolycus/icons/bx-search.svg" onClick={this.handleTorrentSearch}/>
                 </div>
 
                 {this.state.isLoading && <ThreeDotLoader/>}
                 {this.props.searchResults && this.props.searchResults.map((item, idx) => {
                     return (
-                        <div class="torrent-search-result-card" key={idx}>
+                        <div className="torrent-search-result-card" key={idx}>
                             <div style={{display: 'flex'}}>
-                                <img className="search-result-magnet-icon svg-black" style={{paddingRight: '15px', width: '25px'}} src="/autolycus/icons/bx-magnet.svg"/>
+                                <img alt='' className="search-result-magnet-icon svg-black" style={{paddingRight: '15px', width: '25px'}} src="/autolycus/icons/bx-magnet.svg"/>
                                 <div>
-                                    <p class="torrent-search-result-card-name" onClick={() => this.handleClick(item)}>{this.trimString(item.name, 30)}</p>
-                                    <div class="torrent-search-result-card-details">
+                                    <p className="torrent-search-result-card-name" onClick={() => this.handleClick(item)}>{this.trimString(item.name, 30)}</p>
+                                    <div className="torrent-search-result-card-details">
                                         <p>{item.size}</p>
                                         <p>↓ {item.seed}</p>
                                         <p>{item.created}</p>

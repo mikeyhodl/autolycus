@@ -2,19 +2,13 @@ import {uri} from '../uri';
 import axios from 'axios';
 
 
-function handleErrors(response) {
-    if (!response.ok) {
-        return {status: response.status, message: response.statusText};
-    }
-    return response;
-}
-
 function getAuthToken(validate=false){
     let auth = localStorage.getItem('autolycus-auth');
-    if (auth !== "undefined"){
-        auth = JSON.parse(auth)
+    if (auth === undefined || auth === null) {
+        return {access_token: ''};
+    }else{
+        return JSON.parse(auth)
     }
-    return auth;
 }
 
 function clearTokens(){
@@ -107,19 +101,20 @@ async function refreshAccessToken(){
 // refresh access token every 15 minute
 async function ValidateAuth(auto_refresh=false, interval=900){
     let auth = getAuthToken();
+
     return axios.get(uri()+"/auth/user-details", {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${auth.access_token}` 
         }
     }).then(function (response) {
-        let res = response.data;
+        // let res = response.data;
         if (auto_refresh){
             window.setInterval(refreshAccessToken, 1000*interval);
         }
         return true;
     }).catch(function (e) {
-        if (e.response.status === 401){
+        if (e.response && e.response.status === 401){
             if (auto_refresh){
                 window.setInterval(refreshAccessToken, 1000*interval);
             }

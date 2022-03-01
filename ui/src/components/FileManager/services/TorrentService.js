@@ -1,12 +1,12 @@
 import {uri} from "../../../uri";
-import {ValidateAuth} from "../../../services/LoginService";
 
-function getAuthToken(){
+function getAuthToken(validate=false){
     let auth = localStorage.getItem('autolycus-auth');
-    if (auth !== "undefined"){
-        auth = JSON.parse(auth)
+    if (auth === undefined || auth === null) {
+        return {access_token: ''};
+    }else{
+        return JSON.parse(auth)
     }
-    return auth;
 }
 
 function getAuthHeader(method="POST"){
